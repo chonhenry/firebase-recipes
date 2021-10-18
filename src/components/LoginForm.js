@@ -35,6 +35,14 @@ const LoginForm = ({ existingUser }) => {
     }
   }
 
+  async function handleLoginWithGoogle() {
+    try {
+      await FirebaseAuthService.loginWithGoogle();
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   return (
     <h1 className="login-form-container">
       {existingUser ? (
@@ -50,7 +58,10 @@ const LoginForm = ({ existingUser }) => {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="login-form">
-          <label className="input-label login-label">
+          <label
+            style={{ fontSize: "1rem" }}
+            className="input-label login-label"
+          >
             Username (email)
             <input
               type="email"
@@ -60,7 +71,10 @@ const LoginForm = ({ existingUser }) => {
               className="input-text"
             />
           </label>
-          <label className="input-label login-label">
+          <label
+            style={{ fontSize: "1rem" }}
+            className="input-label login-label"
+          >
             Password
             <input
               type="password"
@@ -78,6 +92,13 @@ const LoginForm = ({ existingUser }) => {
               className="primary-button"
             >
               Reset Password
+            </button>
+            <button
+              type="button"
+              onClick={handleLoginWithGoogle}
+              className="primary-button"
+            >
+              google login
             </button>
           </div>
         </form>
