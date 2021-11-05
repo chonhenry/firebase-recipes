@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import ImageUploadPreview from "./ImageUploadPreview";
 
 const AddEditRecipeForm = ({
   existingRecipe,
@@ -14,6 +15,7 @@ const AddEditRecipeForm = ({
       setDirections(existingRecipe.directions);
       setPublishDate(existingRecipe.publishDate.toISOString().split("T")[0]);
       setIngredients(existingRecipe.ingredients);
+      setImageUrl(existingRecipe.imageUrl);
     } else {
       resetForm();
     }
@@ -27,12 +29,18 @@ const AddEditRecipeForm = ({
   const [directions, setDirections] = useState("");
   const [ingredients, setIngredients] = useState([]);
   const [ingredientName, setIngredientName] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   function handleRecipeFormSubmit(e) {
     e.preventDefault();
 
     if (ingredients.length === 0) {
       alert("Ingredients cannot be empty, please add at lesat one ingredient");
+      return;
+    }
+
+    if (!imageUrl) {
+      alert("missing recipe image. please a recipe image");
       return;
     }
 
@@ -45,6 +53,7 @@ const AddEditRecipeForm = ({
       publishDate: new Date(publishDate),
       isPublished,
       ingredients,
+      imageUrl,
     };
 
     if (existingRecipe) {
@@ -79,6 +88,7 @@ const AddEditRecipeForm = ({
     setDirections("");
     setPublishDate("");
     setIngredients([]);
+    setImageUrl("");
   }
 
   return (
@@ -88,6 +98,15 @@ const AddEditRecipeForm = ({
     >
       {existingRecipe ? <h2>Update the recipe</h2> : <h2>Add a new recipe</h2>}
       <div className="top-form-section">
+        <div className="image-input-box">
+          Recipe Image Label
+          <ImageUploadPreview
+            basePath="recipes"
+            existingImageUrl={imageUrl}
+            handleUploadFinish={(downloadUrl) => setImageUrl(downloadUrl)}
+            handleUploadCancel={() => setImageUrl("")}
+          ></ImageUploadPreview>
+        </div>
         <div className="fields">
           <label className="recipe-label input-label">
             Recipe Name:
